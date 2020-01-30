@@ -13,7 +13,10 @@ import (
 	"github.com/varrrro/qapo/internal/selection"
 )
 
-const dataPath = "../data/tai256.dat"
+const (
+	dataPath = "data/tai256c.dat"
+	nGens    = 1000
+)
 
 func init() {
 	// Set log formatter
@@ -32,24 +35,20 @@ func main() {
 		log.WithField("path", dataPath).WithError(err).Fatal("Can't read data file")
 	}
 
-	po := qap.RandomPopulation(100, n)
-	qap.CalculateFitness(po, w, d)
-	for i := 0; i < 1000; i++ {
-		tmp := selection.Tournament(po, 10, 100)
+	pop := qap.RandomPopulation(100, n)
+	qap.CalculateFitness(pop, w, d)
+	for i := 0; i < nGens; i++ {
+		tmp := selection.Tournament(pop, 10, 100)
 		crossover.Order(tmp)
 		mutation.RandomSwap(tmp)
-		qap.CalculateFitness(tmp)
-		replacement.Elitist(po, tmp, 10)
+		qap.CalculateFitness(tmp, w, d)
+		replacement.Elitist(pop, tmp, 10)
 
 		log.WithFields(log.Fields{
 			"gen":  i,
-			"best": getBest(po).Fitness,
+			"best": getBest(pop).Fitness,
 		}).Info("Finished generation")
 	}
-
-	log.WithFields(log.Fields{
-		"best": getBest(po).Fitness,
-	}).Info("Finished execution")
 }
 
 func getBest(perms []*qap.Permutation) *qap.Permutation {

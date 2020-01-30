@@ -1,14 +1,15 @@
 package crossover
 
 import (
-	"github.com/varrrro/qapo/qap"
+	"github.com/varrrro/qapo/internal/qap"
+	"math/rand"
 	"sync"
 )
 
 // Order crossover of the given parents.
 func Order(perms []*qap.Permutation) {
 	var wg sync.WaitGroup
-	for i := 0; i < perms; i += 2 {
+	for i := 0; i < len(perms); i += 2 {
 		wg.Add(1)
 		go func(i1, i2 int) {
 			p1 := perms[i1]
@@ -21,10 +22,10 @@ func Order(perms []*qap.Permutation) {
 
 			start, end := getIndexes(size)
 
-			c1.Values[start:end] = p1.Values[start:end]
-			c2.Values[start:end] = p2.Values[start:end]
+			copy(c1.Values[start:end], p1.Values[start:end])
+			copy(c2.Values[start:end], p2.Values[start:end])
 
-			for pi, c1i, c2i := 0; pi < size; pi++ {
+			for pi, c1i, c2i := 0, 0, 0; pi < size; pi++ {
 				pIndex := (end + pi) % size
 				c1Index := (end + c1i) % size
 				c2Index := (end + c2i) % size
@@ -48,7 +49,7 @@ func Order(perms []*qap.Permutation) {
 	wg.Wait()
 }
 
-func getIndexes(size int) (start, end int){
+func getIndexes(size int) (start, end int) {
 	n1 := rand.Intn(size - 1)
 	n2 := rand.Intn(size)
 
@@ -64,4 +65,5 @@ func isPresent(x int, slice []int) bool {
 			return true
 		}
 	}
+	return false
 }

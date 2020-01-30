@@ -14,7 +14,7 @@ func CalculateFitness(perms []*Permutation, w, d [][]int) {
 		go func(p *Permutation) {
 			sum := 0
 			for i, x := range p.Values {
-				for j, y := range p.Values[i+1:] {
+				for j, y := range p.Values {
 					sum += w[i][j] * d[x][y]
 				}
 			}

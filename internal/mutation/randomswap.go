@@ -1,9 +1,9 @@
 package mutation
 
 import (
-	"github.com/varrrro/qapo/qap"
+	"github.com/varrrro/qapo/internal/qap"
+	"math/rand"
 	"sync"
-	"rand"
 )
 
 // RandomSwap mutation of the given children.
@@ -26,7 +26,7 @@ func RandomSwap(perms []*qap.Permutation) {
 }
 
 func allowMutation() bool {
-	if rand.Float64 < 0.8 {
+	if rand.Float64() < 0.8 {
 		return true
 	}
 	return false

@@ -1,7 +1,7 @@
 package replacement
 
 import (
-	"github.com/varrrro/qapo/qap"
+	"github.com/varrrro/qapo/internal/qap"
 	"sort"
 	"sync"
 )
@@ -24,5 +24,5 @@ func Elitist(prev, new []*qap.Permutation, nElite int) {
 	}()
 	wg.Wait()
 
-	prev[nElite:] = new[:len(prev)-nElite]
+	copy(prev[nElite:], new[:len(prev)-nElite])
 }
