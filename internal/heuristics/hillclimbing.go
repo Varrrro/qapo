@@ -7,7 +7,7 @@ import (
 )
 
 // HillClimbing heuristic algorithm.
-func HillClimbing(perms []*qap.Permutation, w, d [][]int) {
+func HillClimbing(perms []*qap.Permutation, fitness func(*qap.Permutation)) {
 	var wg sync.WaitGroup
 	for _, p := range perms {
 		wg.Add(1)
@@ -20,7 +20,7 @@ func HillClimbing(perms []*qap.Permutation, w, d [][]int) {
 			for i := range p.Values {
 				for j := range p.Values[i+1:] {
 					tmp.Values[i], tmp.Values[j] = tmp.Values[j], tmp.Values[i]
-					qap.CalculateFitness([]*qap.Permutation{tmp}, w, d)
+					fitness(tmp)
 
 					if tmp.Fitness < p.Fitness {
 						copy(p.Values, tmp.Values)

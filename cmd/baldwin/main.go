@@ -45,7 +45,9 @@ func main() {
 		crossover.Order(tmp)
 		mutation.RandomSwap(tmp)
 		qap.CalculateFitness(tmp, w, d)
-		heuristics.HillClimbing(pop, w, d)
+		heuristics.HillClimbing(pop, func(p *qap.Permutation) {
+			qap.CalculateFitness([]*qap.Permutation{p}, w, d)
+		})
 		replacement.Elitist(pop, tmp, 10)
 
 		log.WithFields(log.Fields{

@@ -41,7 +41,9 @@ func main() {
 	pop := qap.RandomPopulation(100, n)
 	qap.CalculateFitness(pop, w, d)
 	for i := 0; i < nGens; i++ {
-		heuristics.HillClimbing(pop, w, d)
+		heuristics.HillClimbing(pop, func(p *qap.Permutation) {
+			qap.CalculateFitness([]*qap.Permutation{p}, w, d)
+		})
 		tmp := selection.Tournament(pop, 10, 100)
 		crossover.Order(tmp)
 		mutation.RandomSwap(tmp)
