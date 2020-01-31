@@ -3,6 +3,7 @@ package main
 import (
 	"math"
 	"os"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -35,6 +36,7 @@ func main() {
 		log.WithField("path", dataPath).WithError(err).Fatal("Can't read data file")
 	}
 
+	start := time.Now()
 	pop := qap.RandomPopulation(100, n)
 	qap.CalculateFitness(pop, w, d)
 	for i := 0; i < nGens; i++ {
@@ -49,6 +51,9 @@ func main() {
 			"best": getBest(pop).Fitness,
 		}).Info("Finished generation")
 	}
+
+	elapsed := time.Since(start)
+	log.WithField("seconds", elapsed.Seconds()).Info("Finished execution")
 }
 
 func getBest(perms []*qap.Permutation) *qap.Permutation {
