@@ -1,9 +1,10 @@
 package crossover
 
 import (
-	"github.com/varrrro/qapo/internal/qap"
 	"math/rand"
 	"sync"
+
+	"github.com/varrrro/qapo/internal/qap"
 )
 
 // Order crossover of the given parents.
@@ -12,19 +13,24 @@ func Order(perms []*qap.Permutation) {
 	for i := 0; i < len(perms); i += 2 {
 		wg.Add(1)
 		go func(i1, i2 int) {
+			// Get two parents
 			p1 := perms[i1]
 			p2 := perms[i2]
 
 			size := len(p1.Values)
 
+			// Create two children
 			c1 := qap.NewPermutation(size)
 			c2 := qap.NewPermutation(size)
 
+			// Get start and end indexes
 			start, end := getIndexes(size)
 
+			// Copy subsets from parent to children
 			copy(c1.Values[start:end], p1.Values[start:end])
 			copy(c2.Values[start:end], p2.Values[start:end])
 
+			// Fill children with the values from the opposing father
 			for pi, c1i, c2i := 0, 0, 0; pi < size; pi++ {
 				pIndex := (end + pi) % size
 				c1Index := (end + c1i) % size
@@ -41,6 +47,7 @@ func Order(perms []*qap.Permutation) {
 				}
 			}
 
+			// Replace parents with children
 			perms[i1] = c1
 			perms[i2] = c2
 			wg.Done()

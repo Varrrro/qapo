@@ -32,22 +32,31 @@ func init() {
 }
 
 func main() {
+	// Read data from file
 	n, w, d, err := qap.ReadData(dataPath)
 	if err != nil {
 		log.WithField("path", dataPath).WithError(err).Fatal("Can't read data file")
 	}
 
 	start := time.Now()
+	// Generate initial population and calculate its fitness
 	pop := qap.RandomPopulation(100, n)
 	qap.CalculateFitness(pop, w, d)
+	// Start generations
 	for i := 0; i < nGens; i++ {
+		// Select parents
 		tmp := selection.Tournament(pop, 10, 100)
+		// Apply crossover to parents
 		crossover.Order(tmp)
+		// Mutate children
 		mutation.RandomSwap(tmp)
+		// Calculate children fitness
 		qap.CalculateFitness(tmp, w, d)
+		// Apply heuristic to current generation
 		heuristics.HillClimbing(pop, func(p *qap.Permutation) {
 			qap.CalculateFitness([]*qap.Permutation{p}, w, d)
 		})
+		// Replace population
 		replacement.Elitist(pop, tmp, 10)
 
 		log.WithFields(log.Fields{

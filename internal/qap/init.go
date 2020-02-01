@@ -4,11 +4,13 @@ import "math/rand"
 
 // RandomPopulation of permutations with length n.
 func RandomPopulation(nPerms, nValues int) []*Permutation {
+	// Create base permutation
 	p := make([]int, nValues)
 	for i := range p {
 		p[i] = i
 	}
 
+	// Generate random permutations with the Knuth shuffle
 	pop := make([]*Permutation, nPerms)
 	for i := range pop {
 		pop[i] = NewPermutation(nValues)

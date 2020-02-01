@@ -23,7 +23,7 @@ func Tournament(perms []*qap.Permutation, k, n int) []*qap.Permutation {
 				tmp[j] = perms[rand.Intn(len(perms))]
 			}
 
-			// Sort slice by fitness
+			// Sort participants by fitness
 			sort.Slice(tmp, func(i, j int) bool {
 				return tmp[i].Fitness < tmp[j].Fitness
 			})
