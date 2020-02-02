@@ -62,7 +62,7 @@ func WritePermutation(path string, perm *Permutation) error {
 	defer file.Close()
 
 	for _, p := range perm.Values {
-		_, err := file.WriteString(fmt.Sprintf("%d,", p))
+		_, err := file.WriteString(fmt.Sprintf("%d ", p))
 		if err != nil {
 			return err
 		}

@@ -58,19 +58,12 @@ func main() {
 			"gen":  i,
 			"best": getBest(pop).Fitness,
 		}).Info("Finished generation")
-
-		for i, p := range pop {
-			log.WithFields(log.Fields{
-				"index":   i,
-				"fitness": p.Fitness,
-			}).Info()
-		}
 	}
 
 	elapsed := time.Since(start)
 	log.WithField("seconds", elapsed.Seconds()).Info("Finished execution")
 
-	//qap.WritePermutation("results/base", getBest(pop))
+	qap.WritePermutation("results/base", getBest(pop))
 }
 
 func getBest(perms []*qap.Permutation) *qap.Permutation {
