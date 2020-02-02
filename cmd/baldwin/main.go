@@ -17,7 +17,7 @@ import (
 
 const (
 	dataPath = "data/tai256c.dat"
-	nGens    = 1000
+	nGens    = 150
 )
 
 func init() {
@@ -53,8 +53,8 @@ func main() {
 		// Calculate children fitness
 		qap.CalculateFitness(tmp, w, d)
 		// Apply heuristic to current generation
-		heuristics.HillClimbing(pop, func(p *qap.Permutation) {
-			qap.CalculateFitness([]*qap.Permutation{p}, w, d)
+		heuristics.HillClimbing(pop, func(p *qap.Permutation, i, j int) int {
+			return qap.CalculateDifference(p, i, j, w, d)
 		})
 		// Replace population
 		replacement.Elitist(pop, tmp, 10)
@@ -67,6 +67,8 @@ func main() {
 
 	elapsed := time.Since(start)
 	log.WithField("seconds", elapsed.Seconds()).Info("Finished execution")
+
+	qap.WritePermutation("results/baldwin", getBest(pop))
 }
 
 func getBest(perms []*qap.Permutation) *qap.Permutation {
