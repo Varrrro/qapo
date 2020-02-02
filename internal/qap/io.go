@@ -2,6 +2,7 @@ package qap
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 )
@@ -50,4 +51,22 @@ func ReadData(path string) (n int, w, d [][]int, err error) {
 	}
 
 	return n, w, d, nil
+}
+
+// WritePermutation values to file.
+func WritePermutation(path string, perm *Permutation) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	for _, p := range perm.Values {
+		_, err := file.WriteString(fmt.Sprintf("%d,", p))
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
